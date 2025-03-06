@@ -13,7 +13,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      pinia: fileURLToPath(new URL('../pinia/src/index.ts', import.meta.url)),
+      // pinia: fileURLToPath(new URL('../pinia/src/index.ts', import.meta.url)),
     },
   },
 })
