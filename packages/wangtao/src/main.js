@@ -8,10 +8,11 @@ import App from './App.vue'
 const app = createApp(App)
 const pinia = createPinia()
 
-pinia.use(function ({ store }) {
-  store.$subscribe((state) => {
-    console.log(state)
-  })
-})
+// pinia.use(function ({ store }) {
+//   store.$subscribe((state) => {
+//     console.log(state)
+//   })
+// })
+
 app.use(pinia)
 app.mount('#app')

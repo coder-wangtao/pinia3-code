@@ -1,6 +1,7 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import { useStore1 } from './store/counter.js'
+debugger
 const store = useStore1()
 const { increment } = store
 
@@ -12,27 +13,27 @@ const handleClick = () => {
   store.$state = { count: 100 }
 }
 
-store.$subscribe((mutation, state) => {
-  //回调
-  console.log('数据变化', state, mutation)
-})
+// store.$subscribe((mutation, state) => {
+//   //回调
+//   console.log('数据变化', state, mutation)
+// })
 
-store.$onAction(({ after, onError, name }) => {
-  //发布订阅
-  console.log('action执行了', name)
+// store.$onAction(({ after, onError, name }) => {
+//   //发布订阅
+//   console.log('action执行了', name)
 
-  after((result) => {
-    console.log('状态已经更新完毕了')
-  })
+//   after((result) => {
+//     console.log('状态已经更新完毕了')
+//   })
 
-  after((result) => {
-    console.log('状态已经更新完毕了')
-  })
+//   after((result) => {
+//     console.log('状态已经更新完毕了')
+//   })
 
-  onError(() => {
-    console.log('出错')
-  })
-})
+//   onError(() => {
+//     console.log('出错')
+//   })
+// })
 </script>
 
 <template>

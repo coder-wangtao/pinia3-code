@@ -53,10 +53,12 @@ function createSetupStore(id, setup, pinia, isOption) {
       partialStateOrMutation(pinia.state.value[id])
     }
   }
+
   let actionSubscriptions = []
   const partialStore = {
     $patch,
     $subscribe(callback, options = {}) {
+      //watch
       // 每次状态变化都会触发此函数
       scope.run(() => {
         watch(
@@ -78,6 +80,7 @@ function createSetupStore(id, setup, pinia, isOption) {
 
   // 后续一些不是用户定义的属性和方法，内置的api会增加到这个store上
   const store = reactive(partialStore) // store 就是一个响应式对象而已
+
   const initialStore = pinia.state.value[id] // 对于setup API 没有初始化过状态
   if (!initialStore && !isOption) {
     // setup API
@@ -88,6 +91,7 @@ function createSetupStore(id, setup, pinia, isOption) {
     scope = effectScope() // 自己可以停止自己
     return scope.run(() => setup())
   })
+
   function wrapAction(name, action) {
     return function () {
       const afterCallbackList = []
@@ -127,12 +131,13 @@ function createSetupStore(id, setup, pinia, isOption) {
       return ret
     }
   }
+
   for (let key in setupStore) {
     const prop = setupStore[key]
     if (typeof prop === 'function') {
       // 你是一个 action
       // 对action中的this和后续的逻辑进行处理，函数劫持
-      setupStore[key] = wrapAction(key, prop)
+      setupStore[key] = wrapAction(key, prop) //AOP
     }
     // 如何看这个值是不是状态
     // computed 也是 ref
@@ -142,13 +147,14 @@ function createSetupStore(id, setup, pinia, isOption) {
       }
     }
   }
+
   store.$id = id
   // console.log(pinia.state.value);
   // pinia._e.stop(); // 停止全部
   // scope.stop() // 只是停止自己
   pinia._s.set(id, store) // 将store 和 id映射起来
-  Object.assign(store, setupStore)
-  // 可以操作store的所有属性
+  Object.assign(store, setupStore) //ref作为reactvie对象属性,会自动解包
+  // 可以操作store的所有属性(持久化插件有可能用到，我们把数据存到了localstorage中，刷新加载，需要用localstorage中的数据替换)
   Object.defineProperty(store, '$state', {
     get: () => pinia.state.value[id],
     set: (state) =>
@@ -169,9 +175,9 @@ function createSetupStore(id, setup, pinia, isOption) {
   })
   return store
 }
+
 function createOptionsStore(id, options, pinia) {
   const { state, actions, getters } = options
-
   function setup() {
     // 这里面会对用户传递的state, actions, getters 做处理
     pinia.state.value[id] = state ? state() : {}
@@ -191,7 +197,9 @@ function createOptionsStore(id, options, pinia) {
       }, {})
     )
   }
+
   const store = createSetupStore(id, setup, pinia, true)
+
   store.$reset = function () {
     const newState = state ? state() : {}
     store.$patch((state) => {
@@ -227,9 +235,11 @@ export function defineStore(idOrOptions, setup) {
     if (!pinia._s.has(id)) {
       // 第一次useStore
       if (isSetupStore) {
+        //创建store
         createSetupStore(id, setup, pinia)
       } else {
         // 如果是第一次，则创建映射关系
+        //id:counter,options:{state,getters,actions}
         createOptionsStore(id, options, pinia)
       }
     }

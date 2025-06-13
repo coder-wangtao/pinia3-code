@@ -1,16 +1,20 @@
 // 存的是createPinia这个api
-import { ref, effectScope } from 'vue'
+import { ref, effectScope, markRaw } from 'vue'
 import { SymbolPinia } from './rootStore'
 export let activePinia // 全局变量
 export const setActivePinia = (pinia) => (activePinia = pinia)
+
 export function createPinia() {
+  debugger
   const scope = effectScope()
   const state = scope.run(() => ref({})) // 用来存储每个store的state的
+
   // scope.stop() 可以通过一个方法全面停止响应式
 
   // 状态里面 可能会存放 计算属性 computed
   const _p = []
-  const pinia = {
+  //它能够从由 reactive 或 ref 创建的响应式代理对象中提取出原始的对象或值
+  const pinia = markRaw({
     use(plugin) {
       _p.push(plugin)
       return this // 链式写法 可以一直.use().use()
@@ -19,17 +23,18 @@ export function createPinia() {
     _s: new Map(), // 这跟用这个map来存放所有的store {counter1=> store, counter2=> store}
     _e: scope, //
     install(app) {
+      pinia._a = app
       setActivePinia(pinia)
       // 对于pinia而言，我们希望让它取管理所有的store
       // pinia 要去收集所有store的信息，过一会想卸载store
       // 如何让所有的store都能获取这个pinia对象
-      app.provide(SymbolPinia, pinia) // 所有组件都可以通过 app.inject(SymbolPinia)
+      app.provide(SymbolPinia, pinia) // 所有组件都可以通过 inject(SymbolPinia)
 
       // this.$pinia
-      app.config.globalProperties.$pinia = pinia // 让vue2的组件实例也可以共享
+      app.config.globalProperties.$pinia = pinia // 让vue2的组件实例也可以共享(兼容vue2)
     },
     state,
-  }
+  })
   return pinia
 }
 
