@@ -1,8 +1,8 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
-import { useStore1 } from './store/counter.js'
+import { useStore2 } from './store/counter.js'
 debugger
-const store = useStore1()
+const store = useStore2()
 const { increment } = store
 
 // setTimeout(() => {

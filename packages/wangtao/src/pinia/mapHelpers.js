@@ -1,3 +1,16 @@
+// mapState(useStore, ['count', 'user'])
+// {
+//   count() { return useStore().count },
+//   user() { return useStore().user }
+// }
+
+// mapActions(useStore, ['increment', 'fetchUser'])
+// {
+//   increment(...args) { return useStore().increment(...args) },
+//   fetchUser(...args) { return useStore().fetchUser(...args) }
+// }
+
+//取出store中的state做映射
 export function mapState(useStore, keysOrMapper) {
   return Array.isArray(keysOrMapper)
     ? keysOrMapper.reduce((reduced, key) => {
@@ -24,6 +37,7 @@ export function mapState(useStore, keysOrMapper) {
 
 export const mapGetters = mapState
 
+//取出store中的action做映射
 export function mapActions(useStore, keysOrMapper) {
   return Array.isArray(keysOrMapper)
     ? keysOrMapper.reduce((reduced, key) => {

@@ -5,7 +5,6 @@ export let activePinia // 全局变量
 export const setActivePinia = (pinia) => (activePinia = pinia)
 
 export function createPinia() {
-  debugger
   const scope = effectScope()
   const state = scope.run(() => ref({})) // 用来存储每个store的state的
 
@@ -20,7 +19,7 @@ export function createPinia() {
       return this // 链式写法 可以一直.use().use()
     },
     _p,
-    _s: new Map(), // 这跟用这个map来存放所有的store {counter1=> store, counter2=> store}
+    _s: new Map(), // 这跟用这个map来存放所有的store {counter1=> store, counter2=> store} store1、store2、store3
     _e: scope, //
     install(app) {
       pinia._a = app

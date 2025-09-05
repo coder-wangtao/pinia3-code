@@ -13,6 +13,7 @@ import {
 import { activePinia, setActivePinia } from './createPinia'
 import { SymbolPinia } from './rootStore'
 import { addSubscription, triggerSubscriptions } from './pubSub'
+
 // createPinia(),默认是一个插件具备一个install方法
 // _s 用来存储 id =>  store
 // state 用来存储所有状态
