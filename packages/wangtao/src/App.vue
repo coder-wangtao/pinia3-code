@@ -18,22 +18,22 @@ const handleClick = () => {
 //   console.log('数据变化', state, mutation)
 // })
 
-// store.$onAction(({ after, onError, name }) => {
-//   //发布订阅
-//   console.log('action执行了', name)
+store.$onAction(({ after, onError, name }) => {
+  //发布订阅
+  console.log('action执行了', name)
 
-//   after((result) => {
-//     console.log('状态已经更新完毕了')
-//   })
+  after((result) => {
+    console.log('状态已经更新完毕了')
+  })
 
-//   after((result) => {
-//     console.log('状态已经更新完毕了')
-//   })
+  after((result) => {
+    console.log('状态已经更新完毕了')
+  })
 
-//   onError(() => {
-//     console.log('出错')
-//   })
-// })
+  onError(() => {
+    console.log('出错')
+  })
+})
 </script>
 
 <template>
